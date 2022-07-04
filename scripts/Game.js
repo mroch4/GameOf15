@@ -27,7 +27,7 @@ export class Game {
         const currentIndexOfZero = this.currentCombination.indexOf(0)
         const currentIndexOfClicked = this.currentCombination.indexOf(clickedItem)
         const boardDistance = Math.abs(currentIndexOfClicked - currentIndexOfZero)
-        if (boardDistance === 1 || boardDistance === 4) this.swapTiles(currentIndexOfZero, currentIndexOfClicked)
+        if (boardDistance === 1 || boardDistance === this.size) this.swapTiles(currentIndexOfZero, currentIndexOfClicked)
     }
 
     checkIfSuccess = () => {
