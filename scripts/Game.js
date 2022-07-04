@@ -39,7 +39,6 @@ export class Game {
         const currentIndexOfZero = this.currentCombination.indexOf(0)
         const indexOfTileAbove = currentIndexOfZero - this.size
         if (indexOfTileAbove >= 0) this.swapTiles(currentIndexOfZero, indexOfTileAbove)
-
     }
 
     moveRight = () => {
