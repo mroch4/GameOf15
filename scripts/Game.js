@@ -1,13 +1,12 @@
-import startupCombinations from "./Combinations.js"
+import { target } from "./Combinations.js"
 
 export class Game {
-    constructor(gameBoard, size) {
-        this.gameBoard = gameBoard
+    constructor(size, gameBoard, randomCombination) {
         this.size = size
+        this.gameBoard = gameBoard
+        this.currentCombination = randomCombination
     }
 
-    targetCombination = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]
-    currentCombination = startupCombinations[1]
     moves = 0
 
     render = () => {
@@ -18,13 +17,21 @@ export class Game {
             else {
                 tile.classList.add('tile')
                 tile.innerText = item
+                tile.addEventListener('click', () => this.handleOnClick(item))
             }
             this.gameBoard.append(tile)
         })
     }
 
+    handleOnClick = (clickedItem) => {
+        const currentIndexOfZero = this.currentCombination.indexOf(0)
+        const currentIndexOfClicked = this.currentCombination.indexOf(clickedItem)
+        const boardDistance = Math.abs(currentIndexOfClicked - currentIndexOfZero)
+        if (boardDistance === 1 || boardDistance === 4) this.swapTiles(currentIndexOfZero, currentIndexOfClicked)
+    }
+
     checkIfSuccess = () => {
-        if (this.currentCombination.every((value, index) => value === this.targetCombination[index])) alert(`Koniec gry, ilość ruchów: ${this.moves}`)
+        if (this.currentCombination.every((value, index) => value === target[index])) alert(`Koniec gry, ilość ruchów: ${this.moves}`)
     }
 
     swapTiles = (currentIndexOfZero, indexOfItemToReplace) => {
@@ -50,6 +57,7 @@ export class Game {
     moveLeft = () => {
         const currentIndexOfZero = this.currentCombination.indexOf(0)
         const indexOfLeftTile = currentIndexOfZero - 1
+        if (indexOfLeftTile === -1) return
         if (indexOfLeftTile % 4 !== this.size - 1) this.swapTiles(currentIndexOfZero, indexOfLeftTile)
     }
 
