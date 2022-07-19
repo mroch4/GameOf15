@@ -1,9 +1,13 @@
 :root {
-  --background-color: #707070;
+  --background-color: #a0a0a0;
 }
 
 body {
   background-color: var(--background-color);
+}
+
+body h5 {
+  color: white;
 }
 
 body #main {
@@ -20,7 +24,7 @@ body #main #game-board {
       grid-template-columns: repeat(4, 1fr);
 }
 
-.tile {
+body #main #game-board .tile {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -35,7 +39,7 @@ body #main #game-board {
   font-size: 2rem;
 }
 
-.empty {
+body #main #game-board .empty {
   background-color: var(--background-color);
 }
 /*# sourceMappingURL=styles.css.map */

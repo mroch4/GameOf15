@@ -1,16 +1,30 @@
-import { initial } from "./Combinations.js";
 import { Game } from "./Game.js"
+import { initial } from "./Combinations.js"
 
-const GAME_SIZE = 4
 const gameBoard = document.getElementById('game-board')
-const randomCombination = initial[Math.floor(Math.random() * initial.length)];
+const movesPlaceholder = document.getElementById('counter')
+let game
 
-const game = new Game(GAME_SIZE, gameBoard, randomCombination)
+const initialize = () => {
+    const storageCombination = localStorage.getItem('storageCombination')
+    const storageMoves = localStorage.getItem('storageMoves')
 
-window.onload = game.render()
+    if (storageCombination === null && storageMoves === null) {
+        const randomCombination = initial[Math.floor(Math.random() * initial.length)]
+        game = new Game(4, gameBoard, movesPlaceholder, randomCombination, 0)
+    } else {
+        const array = Array.from(storageCombination.split(','))
+        const parsedArray = array.map(item => parseInt(item))
+        const moves = parseInt(storageMoves)
+        game = new Game(4, gameBoard, movesPlaceholder, parsedArray, moves)
+    }
+    game.render()
+}
+
+window.onload = initialize();
 
 window.addEventListener('keydown', e => {
-    e.preventDefault()
+    e.preventDefault();
     switch (e.key) {
         case ('ArrowUp'):
             game.moveDown()
@@ -28,3 +42,14 @@ window.addEventListener('keydown', e => {
             break
     }
 })
+
+document.getElementById('retry').onclick = () => {
+    localStorage.clear()
+    initialize()
+}
+
+document.getElementById('easy').onclick = () => {
+    localStorage.clear()
+    game = new Game(4, gameBoard, movesPlaceholder, initial[0], 0)
+    game.render()
+}

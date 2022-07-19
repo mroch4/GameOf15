@@ -1,16 +1,23 @@
 import { target } from "./Combinations.js"
 
 export class Game {
-    constructor(size, gameBoard, randomCombination) {
+    constructor(size, gameBoard, movesPlaceholder, combination, movesAmount) {
         this.size = size
         this.gameBoard = gameBoard
-        this.currentCombination = randomCombination
+        this.movesPlaceholder = movesPlaceholder
+        this.currentCombination = combination
+        this.movesAmount = movesAmount
     }
 
-    moves = 0
+    handleOnClick = (clickedItem) => {
+        const currentIndexOfZero = this.currentCombination.indexOf(0)
+        const currentIndexOfClicked = this.currentCombination.indexOf(clickedItem)
+        const boardDistance = Math.abs(currentIndexOfClicked - currentIndexOfZero)
+        if (boardDistance === 1 || boardDistance === this.size) this.swapTiles(currentIndexOfZero, currentIndexOfClicked)
+    }
 
     render = () => {
-        this.gameBoard.innerHTML = ''
+        this.gameBoard.innerText = ''
         this.currentCombination.map(item => {
             const tile = document.createElement('div')
             if (item === 0) tile.classList.add('tile', 'empty')
@@ -21,24 +28,24 @@ export class Game {
             }
             this.gameBoard.append(tile)
         })
+        this.movesPlaceholder.innerText = `Amount of moves: ${this.movesAmount}`
     }
 
-    handleOnClick = (clickedItem) => {
-        const currentIndexOfZero = this.currentCombination.indexOf(0)
-        const currentIndexOfClicked = this.currentCombination.indexOf(clickedItem)
-        const boardDistance = Math.abs(currentIndexOfClicked - currentIndexOfZero)
-        if (boardDistance === 1 || boardDistance === this.size) this.swapTiles(currentIndexOfZero, currentIndexOfClicked)
+    updateStorage = () => {
+        localStorage.setItem('storageCombination', this.currentCombination)
+        localStorage.setItem('storageMoves', this.movesAmount)
     }
 
     checkIfSuccess = () => {
-        if (this.currentCombination.every((value, index) => value === target[index])) alert(`Koniec gry, ilość ruchów: ${this.moves}`)
+        if (this.currentCombination.every((value, index) => value === target[index])) alert(`Koniec gry, ilość ruchów: ${this.movesAmount}`)
     }
 
     swapTiles = (currentIndexOfZero, indexOfItemToReplace) => {
         [this.currentCombination[currentIndexOfZero], this.currentCombination[indexOfItemToReplace]] =
             [this.currentCombination[indexOfItemToReplace], this.currentCombination[currentIndexOfZero]]
-        this.moves++
+        this.movesAmount++
         this.render()
+        this.updateStorage()
         this.checkIfSuccess()
     }
 
